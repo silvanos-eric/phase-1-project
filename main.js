@@ -2,8 +2,10 @@
 const quoteCardEl = document.querySelector(".card");
 const quoteNumberEl = document.querySelector(".card-title");
 const quoteAdviceEl = document.querySelector(".card-text");
-const getNewQuoteBtnEl = document.querySelector(".card button");
+const getNewQuoteBtnEl = document.querySelector("#new-quote");
+const favoriteBtnEl = document.querySelector("button#favorite");
 const laodingIndicatorEl = document.querySelector("#loading-indicator");
+const favoriteListEl = document.querySelector("#favorite-list");
 
 // Main function
 const main = async () => {
@@ -12,15 +14,25 @@ const main = async () => {
   hideLoadingIndicator();
   showQuoteCard();
   updateQuoteCard(quoteData);
+
+  // Functionality to allow request of a new quote
   quoteChangeInit();
+
+  // Functionality to allow favoriting a quote
+  favoriteQuoteInit();
 };
 
 main();
 
 // Utility functions
-async function getQuote() {
+async function getQuote(id) {
   try {
-    const response = await fetch("https://api.adviceslip.com/advice");
+    let response = undefined;
+    if (id) {
+      response = await fetch(`https://api.adviceslip.com/advice/${id}`);
+    } else {
+      response = await fetch("https://api.adviceslip.com/advice");
+    }
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
@@ -38,6 +50,7 @@ async function getQuote() {
 function updateQuoteCard(quoteData) {
   quoteNumberEl.textContent = `Advice # ${quoteData.id}`;
   quoteAdviceEl.textContent = quoteData.advice;
+  quoteCardEl.dataset.id = quoteData.id;
 }
 
 function quoteChangeInit() {
@@ -65,4 +78,36 @@ function showQuoteCard() {
 
 function showLoadingIndicator() {
   laodingIndicatorEl.classList.remove("d-none");
+}
+
+function favoriteQuoteInit() {
+  favoriteBtnEl.addEventListener("click", async () => {
+    const quoteId = quoteCardEl.dataset.id;
+
+    const quoteData = await getQuote(quoteId);
+    addQuoteToFavorites(quoteData);
+  });
+}
+
+function addQuoteToFavorites(quoteData) {
+  createFavoriteQuote(quoteData);
+}
+
+function createFavoriteQuote(quoteData) {
+  const favoriteQuoteEl = document.createElement("li");
+  favoriteQuoteEl.classList.add("list-group-item", "d-flex", "gap-2");
+
+  const quoteNumberEl = document.createElement("span");
+  quoteNumberEl.textContent = quoteData.id;
+  favoriteQuoteEl.appendChild(quoteNumberEl);
+
+  const quoteAdviceEl = document.createElement("span");
+  quoteAdviceEl.textContent = quoteData.advice;
+  favoriteQuoteEl.appendChild(quoteAdviceEl);
+
+  appendQuoteToFavorites(favoriteQuoteEl);
+}
+
+function appendQuoteToFavorites(quote) {
+  favoriteListEl.append(quote);
 }
