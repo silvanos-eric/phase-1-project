@@ -33,7 +33,6 @@ async function getQuote() {
 }
 
 function displayQuote(quoteData) {
-  console.log(quoteData);
   quoteNumber.textContent = `Advice # ${quoteData.id}`;
   quoteAdvice.textContent = quoteData.advice;
 }
