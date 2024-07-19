@@ -1,15 +1,18 @@
 // Elements of interest
-const quoteCard = document.querySelector(".card");
-const quoteNumber = document.querySelector(".card-title");
-const quoteAdvice = document.querySelector(".card-text");
-const getNewQuoteBtn = document.querySelector(".card button");
+const quoteCardEl = document.querySelector(".card");
+const quoteNumberEl = document.querySelector(".card-title");
+const quoteAdviceEl = document.querySelector(".card-text");
+const getNewQuoteBtnEl = document.querySelector(".card button");
+const laodingIndicatorEl = document.querySelector("#loading-indicator");
 
+// Main function
 const main = async () => {
-  // Get a sample quote from API
+  hideQuoteCard();
   const quoteData = await getQuote();
-
-  // Display quote
-  displayQuote(quoteData);
+  hideLoadingIndicator();
+  showQuoteCard();
+  updateQuoteCard(quoteData);
+  quoteChangeInit();
 };
 
 main();
@@ -32,7 +35,34 @@ async function getQuote() {
   }
 }
 
-function displayQuote(quoteData) {
-  quoteNumber.textContent = `Advice # ${quoteData.id}`;
-  quoteAdvice.textContent = quoteData.advice;
+function updateQuoteCard(quoteData) {
+  quoteNumberEl.textContent = `Advice # ${quoteData.id}`;
+  quoteAdviceEl.textContent = quoteData.advice;
+}
+
+function quoteChangeInit() {
+  getNewQuoteBtnEl.addEventListener("click", async () => {
+    hideQuoteCard();
+    showLoadingIndicator();
+    const quoteData = await getQuote();
+    hideLoadingIndicator();
+    showQuoteCard();
+    updateQuoteCard(quoteData);
+  });
+}
+
+function hideQuoteCard() {
+  quoteCardEl.classList.add("d-none");
+}
+
+function hideLoadingIndicator() {
+  laodingIndicatorEl.classList.add("d-none");
+}
+
+function showQuoteCard() {
+  quoteCardEl.classList.remove("d-none");
+}
+
+function showLoadingIndicator() {
+  laodingIndicatorEl.classList.remove("d-none");
 }
