@@ -1,4 +1,8 @@
+// Application state
+const favoriteQuotesState = [];
+
 // Elements of interest
+const fragmentEl = document.createDocumentFragment();
 const quoteCardEl = document.querySelector(".card");
 const quoteNumberEl = document.querySelector(".card-title");
 const quoteAdviceEl = document.querySelector(".card-text");
@@ -22,7 +26,7 @@ const main = async () => {
   favoriteQuoteInit();
 
   // Functionality to remove a favorite quote
-  removeFavoriteQuote();
+  removeFavoriteQuoteInit();
 };
 
 main();
@@ -31,14 +35,17 @@ main();
 async function getQuote(id) {
   try {
     let response = undefined;
+
+    const httpOptions = {
+      cache: "no-cache",
+    };
     if (id) {
-      response = await fetch(`https://api.adviceslip.com/advice/${id}`, {
-        cache: "no-cache",
-      });
+      response = await fetch(
+        `https://api.adviceslip.com/advice/${id}`,
+        httpOptions
+      );
     } else {
-      response = await fetch("https://api.adviceslip.com/advice", {
-        cache: "no-cache",
-      });
+      response = await fetch("https://api.adviceslip.com/advice", httpOptions);
     }
 
     if (!response.ok) {
@@ -97,7 +104,10 @@ function favoriteQuoteInit() {
 }
 
 function addQuoteToFavorites(quoteData) {
-  createFavoriteQuote(quoteData);
+  if (!checkIfQuoteAlreadyExists(quoteData)) {
+    favoriteQuotesState.push(quoteData);
+  }
+  updateFavoriteListEl(favoriteQuotesState);
 }
 
 function createFavoriteQuote(quoteData) {
@@ -117,14 +127,14 @@ function createFavoriteQuote(quoteData) {
   removeBtnEl.textContent = "X";
   favoriteQuoteEl.appendChild(removeBtnEl);
 
-  appendQuoteToFavorites(favoriteQuoteEl);
+  appendQuoteToFragment(favoriteQuoteEl);
 }
 
-function appendQuoteToFavorites(quote) {
-  favoriteListEl.append(quote);
+function appendQuoteToFragment(quote) {
+  fragmentEl.append(quote);
 }
 
-function removeFavoriteQuote() {
+function removeFavoriteQuoteInit() {
   favoriteListEl.addEventListener("click", (event) => {
     if (event.target.matches("button")) {
       removeEl(event.target.parentElement);
@@ -134,4 +144,23 @@ function removeFavoriteQuote() {
 
 function removeEl(el) {
   el.remove();
+}
+
+function checkIfQuoteAlreadyExists(quote) {
+  if (favoriteQuotesState.find((q) => q.id === quote.id)) {
+    return true;
+  }
+  return false;
+}
+
+function updateFavoriteListEl(newFavoriteQuoteState) {
+  clearFavoriteListEl();
+  for (const quote of newFavoriteQuoteState) {
+    createFavoriteQuote(quote);
+  }
+  favoriteListEl.appendChild(fragmentEl);
+}
+
+function clearFavoriteListEl() {
+  favoriteListEl.innerHTML = null;
 }
