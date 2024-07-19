@@ -20,6 +20,9 @@ const main = async () => {
 
   // Functionality to allow favoriting a quote
   favoriteQuoteInit();
+
+  // Functionality to remove a favorite quote
+  removeFavoriteQuote();
 };
 
 main();
@@ -105,9 +108,26 @@ function createFavoriteQuote(quoteData) {
   quoteAdviceEl.textContent = quoteData.advice;
   favoriteQuoteEl.appendChild(quoteAdviceEl);
 
+  const removeBtnEl = document.createElement("button");
+  removeBtnEl.classList.add("btn", "btn-danger", "ms-auto");
+  removeBtnEl.textContent = "X";
+  favoriteQuoteEl.appendChild(removeBtnEl);
+
   appendQuoteToFavorites(favoriteQuoteEl);
 }
 
 function appendQuoteToFavorites(quote) {
   favoriteListEl.append(quote);
+}
+
+function removeFavoriteQuote() {
+  favoriteListEl.addEventListener("click", (event) => {
+    if (event.target.matches("button")) {
+      removeEl(event.target.parentElement);
+    }
+  });
+}
+
+function removeEl(el) {
+  el.remove();
 }
