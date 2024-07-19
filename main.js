@@ -32,9 +32,13 @@ async function getQuote(id) {
   try {
     let response = undefined;
     if (id) {
-      response = await fetch(`https://api.adviceslip.com/advice/${id}`);
+      response = await fetch(`https://api.adviceslip.com/advice/${id}`, {
+        cache: "no-cache",
+      });
     } else {
-      response = await fetch("https://api.adviceslip.com/advice");
+      response = await fetch("https://api.adviceslip.com/advice", {
+        cache: "no-cache",
+      });
     }
 
     if (!response.ok) {
