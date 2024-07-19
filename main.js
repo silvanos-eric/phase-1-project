@@ -1,5 +1,5 @@
 // Application state
-const favoriteQuotesState = [];
+let favoriteQuotesState = [];
 
 // Elements of interest
 const fragmentEl = document.createDocumentFragment();
@@ -113,6 +113,7 @@ function addQuoteToFavorites(quoteData) {
 function createFavoriteQuote(quoteData) {
   const favoriteQuoteEl = document.createElement("li");
   favoriteQuoteEl.classList.add("list-group-item", "d-flex", "gap-2");
+  favoriteQuoteEl.dataset.id = quoteData.id;
 
   const quoteNumberEl = document.createElement("span");
   quoteNumberEl.textContent = quoteData.id;
@@ -137,7 +138,9 @@ function appendQuoteToFragment(quote) {
 function removeFavoriteQuoteInit() {
   favoriteListEl.addEventListener("click", (event) => {
     if (event.target.matches("button")) {
-      removeEl(event.target.parentElement);
+      const parentEl = event.target.parentElement;
+      const quoteId = parentEl.dataset.id;
+      removeQuote(quoteId);
     }
   });
 }
@@ -163,4 +166,10 @@ function updateFavoriteListEl(newFavoriteQuoteState) {
 
 function clearFavoriteListEl() {
   favoriteListEl.innerHTML = null;
+}
+
+function removeQuote(id) {
+  id = Number.parseInt(id, 10);
+  favoriteQuotesState = favoriteQuotesState.filter((q) => q.id !== id);
+  updateFavoriteListEl(favoriteQuotesState);
 }
