@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -14,18 +14,38 @@
     <link rel="stylesheet" href="style.css" />
     <script src="./main.js" defer></script>
   </head>
-  <body>
-    <header>
-      <h1>Advice Generator App</h1>
+  <body class="d-flex flex-column h-100 container p-5 bg-dark bg-gradient">
+    <header class="text-center">
+      <h1 class="text-warning">Advice Generator App</h1>
     </header>
 
-    <main>
-      <section></section>
-      <section></section>
+    <main class="flex-grow-1 container">
+      <div class="row justify-content-center h-100">
+        <div
+          class="col col-lg-5 d-flex align-items-center justify-content-center"
+        >
+          <section>
+            <div class="card" style="min-width: 18rem">
+              <div class="card-body">
+                <h5 class="card-title"></h5>
+                <p class="card-text"></p>
+                <button class="btn btn-success d-block m-auto">
+                  <img src="/card-image.svg" />
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="col col-lg-5">
+          <section>
+            <h2 class="text-warning">Favorite Quotes</h2>
+          </section>
+        </div>
+      </div>
     </main>
 
     <footer>
-      <small
+      <small class="text-white"
         >Certainly! Here's a sample disclaimer you can use for your advice
         generator app: --- <span>Disclaimer:</span> The advice and information
         provided by this app are for entertainment and general informational
