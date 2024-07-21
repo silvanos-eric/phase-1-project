@@ -161,6 +161,7 @@ function removeEl(el) {
 
 function checkIfQuoteAlreadyExists(quote) {
   if (favoriteQuotesState.find((q) => q.id === quote.id)) {
+    showModal();
     return true;
   }
   return false;
@@ -194,3 +195,5 @@ function scrollIntoViewGenerator() {
     quoteCardEl.scrollIntoView({ behavior: "smooth", block: "center" });
   });
 }
+
+function showModal() {}
