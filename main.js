@@ -109,15 +109,17 @@ function favoriteAdviceInit() {
 
     const adviceData = await getAdvice(adviceId);
     addAdviceToFavorites(adviceData);
-    showNewFavoriteAdvice();
   });
 }
 
 function addAdviceToFavorites(adviceData) {
   if (!checkIfAdviceAlreadyExists(adviceData)) {
     favoriteAdviceState.push(adviceData);
+    updateFavoriteListEl(favoriteAdviceState);
+    showNewFavoriteAdvice();
+  } else {
+    showModal(adviceData.id);
   }
-  updateFavoriteListEl(favoriteAdviceState);
 }
 
 function createFavoriteAdvice(adviceData) {
@@ -160,8 +162,7 @@ function removeEl(el) {
 }
 
 function checkIfAdviceAlreadyExists(advice) {
-  if (favoriteAdviceState.find((q) => q.id === advice.id)) {
-    showModal();
+  if (favoriteAdviceState.find((a) => a.id === advice.id)) {
     return true;
   }
   return false;
@@ -169,9 +170,7 @@ function checkIfAdviceAlreadyExists(advice) {
 
 function updateFavoriteListEl(newFavoriteAdviceState) {
   clearFavoriteListEl();
-  for (const advice of newFavoriteAdviceState) {
-    createFavoriteAdvice(advice);
-  }
+  createFavoriteListEl(newFavoriteAdviceState);
   favoriteListEl.appendChild(fragmentEl);
 }
 
@@ -181,7 +180,7 @@ function clearFavoriteListEl() {
 
 function removeAdvice(id) {
   const numberId = Number.parseInt(id, 10);
-  favoriteAdviceState = favoriteAdviceState.filter((q) => q.id !== numberId);
+  favoriteAdviceState = favoriteAdviceState.filter((a) => a.id !== numberId);
   updateFavoriteListEl(favoriteAdviceState);
 }
 
@@ -196,17 +195,23 @@ function scrollIntoViewGenerator() {
   });
 }
 
-function showModal() {
+function showModal(adviceId) {
   const duplicateModal = new bootstrap.Modal(
     document.getElementById("duplicateModal", {
       keyboard: false,
     })
   );
-  updateModalMessage();
+  updateModalMessage(adviceId);
   duplicateModal.show();
 }
 
 function updateModalMessage(adviceId) {
   const messageEl = document.querySelector(".modal-body");
   messageEl.textContent = `Duplicate advice. Advice with number ${adviceId} already exists!`;
+}
+
+function createFavoriteListEl(favoriteAdviceState) {
+  for (const advice of favoriteAdviceState) {
+    createFavoriteAdvice(advice);
+  }
 }
