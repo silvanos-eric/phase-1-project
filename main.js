@@ -105,6 +105,7 @@ function favoriteQuoteInit() {
 
     const quoteData = await getQuote(quoteId);
     addQuoteToFavorites(quoteData);
+    showNewFavoriteQuote();
   });
 }
 
@@ -177,4 +178,9 @@ function removeQuote(id) {
   const numberId = Number.parseInt(id, 10);
   favoriteQuotesState = favoriteQuotesState.filter((q) => q.id !== numberId);
   updateFavoriteListEl(favoriteQuotesState);
+}
+
+function showNewFavoriteQuote() {
+  const newFavoriteQuote = favoriteListEl.lastElementChild;
+  newFavoriteQuote.scrollIntoView({ behavior: "smooth", block: "center" });
 }
