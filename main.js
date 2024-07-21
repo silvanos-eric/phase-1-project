@@ -11,6 +11,7 @@ const favoriteBtnEl = document.querySelector("button#favorite");
 const laodingIndicatorEl = document.querySelector("#loading-indicator");
 const favoriteListEl = document.querySelector("#favorite-list");
 const showBtnEl = document.querySelector("#show");
+const sadFaceEl = document.querySelector("#sad-face");
 
 // Main function
 const main = () => {
@@ -109,6 +110,10 @@ function favoriteAdviceInit() {
 
     const adviceData = await getAdvice(adviceId);
     addAdviceToFavorites(adviceData);
+
+    if (favoriteAdviceState.length > 0) {
+      hideSadFaceEl();
+    }
   });
 }
 
@@ -153,6 +158,9 @@ function removeFavoriteAdviceInit() {
       const parentEl = event.target.parentElement;
       const adviceId = parentEl.dataset.id;
       removeAdvice(adviceId);
+    }
+    if (favoriteAdviceState.length < 1) {
+      showSadFaceEl();
     }
   });
 }
@@ -214,4 +222,12 @@ function createFavoriteListEl(favoriteAdviceState) {
   for (const advice of favoriteAdviceState) {
     createFavoriteAdvice(advice);
   }
+}
+
+function hideSadFaceEl() {
+  sadFaceEl.classList.add("d-none");
+}
+
+function showSadFaceEl() {
+  sadFaceEl.classList.remove("d-none");
 }
