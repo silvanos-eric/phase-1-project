@@ -12,7 +12,7 @@ const laodingIndicatorEl = document.querySelector("#loading-indicator");
 const favoriteListEl = document.querySelector("#favorite-list");
 
 // Main function
-const main = async () => {
+const main = () => {
   // Functionality to load and show quote card
   quoteCardDisplayInit();
 
