@@ -129,7 +129,7 @@ function createFavoriteQuote(quoteData) {
   favoriteQuoteEl.appendChild(quoteAdviceEl);
 
   const removeBtnEl = document.createElement("button");
-  removeBtnEl.classList.add("btn", "btn-danger", "ms-auto");
+  removeBtnEl.classList.add("btn", "btn-danger", "ms-auto", "align-self-start");
   removeBtnEl.textContent = "X";
   favoriteQuoteEl.appendChild(removeBtnEl);
 
