@@ -10,6 +10,7 @@ const getNewQuoteBtnEl = document.querySelector("#new-quote");
 const favoriteBtnEl = document.querySelector("button#favorite");
 const laodingIndicatorEl = document.querySelector("#loading-indicator");
 const favoriteListEl = document.querySelector("#favorite-list");
+const showBtnEl = document.querySelector("#show");
 
 // Main function
 const main = () => {
@@ -24,6 +25,9 @@ const main = () => {
 
   // Functionality to remove a favorite quote
   removeFavoriteQuoteInit();
+
+  // Functionality to scroll back to quote generator
+  scrollIntoViewGenerator();
 };
 
 main();
@@ -183,4 +187,10 @@ function removeQuote(id) {
 function showNewFavoriteQuote() {
   const newFavoriteQuote = favoriteListEl.lastElementChild;
   newFavoriteQuote.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function scrollIntoViewGenerator() {
+  showBtnEl.addEventListener("click", () => {
+    quoteCardEl.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
 }
