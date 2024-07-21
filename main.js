@@ -13,11 +13,8 @@ const favoriteListEl = document.querySelector("#favorite-list");
 
 // Main function
 const main = async () => {
-  hideQuoteCard();
-  const quoteData = await getQuote();
-  hideLoadingIndicator();
-  showQuoteCard();
-  updateQuoteCard(quoteData);
+  // Functionality to load and show quote card
+  quoteCardDisplayInit();
 
   // Functionality to allow request of a new quote
   quoteChangeInit();
@@ -32,6 +29,14 @@ const main = async () => {
 main();
 
 // Utility functions
+async function quoteCardDisplayInit() {
+  hideQuoteCard();
+  const quoteData = await getQuote();
+  hideLoadingIndicator();
+  showQuoteCard();
+  updateQuoteCard(quoteData);
+}
+
 async function getQuote(id) {
   try {
     let response = undefined;
@@ -169,7 +174,7 @@ function clearFavoriteListEl() {
 }
 
 function removeQuote(id) {
-  id = Number.parseInt(id, 10);
-  favoriteQuotesState = favoriteQuotesState.filter((q) => q.id !== id);
+  const numberId = Number.parseInt(id, 10);
+  favoriteQuotesState = favoriteQuotesState.filter((q) => q.id !== numberId);
   updateFavoriteListEl(favoriteQuotesState);
 }
