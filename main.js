@@ -1,12 +1,12 @@
 // Application state
-let favoriteQuotesState = [];
+let favoriteAdviceState = [];
 
 // Elements of interest
 const fragmentEl = document.createDocumentFragment();
-const quoteCardEl = document.querySelector(".card");
-const quoteNumberEl = document.querySelector(".card-title");
-const quoteAdviceEl = document.querySelector(".card-text");
-const getNewQuoteBtnEl = document.querySelector("#new-quote");
+const adviceCardEl = document.querySelector(".card");
+const adviceNumberEl = document.querySelector(".card-title");
+const adviceTextEl = document.querySelector(".card-text");
+const getNewAdviceBtnEl = document.querySelector("#new-advice");
 const favoriteBtnEl = document.querySelector("button#favorite");
 const laodingIndicatorEl = document.querySelector("#loading-indicator");
 const favoriteListEl = document.querySelector("#favorite-list");
@@ -14,34 +14,34 @@ const showBtnEl = document.querySelector("#show");
 
 // Main function
 const main = () => {
-  // Functionality to load and show quote card
-  quoteCardDisplayInit();
+  // Functionality to load and show advice card
+  adviceCardDisplayInit();
 
-  // Functionality to allow request of a new quote
-  quoteChangeInit();
+  // Functionality to allow request of a new advice
+  adviceChangeInit();
 
-  // Functionality to allow favoriting a quote
-  favoriteQuoteInit();
+  // Functionality to allow favoriting a advice
+  favoriteAdviceInit();
 
-  // Functionality to remove a favorite quote
-  removeFavoriteQuoteInit();
+  // Functionality to remove a favorite advice
+  removeFavoriteAdviceInit();
 
-  // Functionality to scroll back to quote generator
+  // Functionality to scroll back to advice generator
   scrollIntoViewGenerator();
 };
 
 main();
 
 // Utility functions
-async function quoteCardDisplayInit() {
-  hideQuoteCard();
-  const quoteData = await getQuote();
+async function adviceCardDisplayInit() {
+  hideAdviceCard();
+  const adviceData = await getAdvice();
   hideLoadingIndicator();
-  showQuoteCard();
-  updateQuoteCard(quoteData);
+  showAdviceCard();
+  updateAdviceCard(adviceData);
 }
 
-async function getQuote(id) {
+async function getAdvice(id) {
   try {
     let response = undefined;
 
@@ -61,8 +61,8 @@ async function getQuote(id) {
       throw new Error("Network response was not ok");
     }
 
-    const quoteData = await response.json();
-    return quoteData.slip;
+    const adviceData = await response.json();
+    return adviceData.slip;
   } catch (error) {
     console.error(
       `There was a problem with your fetch operation: ${error.message}`
@@ -70,87 +70,87 @@ async function getQuote(id) {
   }
 }
 
-function updateQuoteCard(quoteData) {
-  quoteNumberEl.textContent = `Advice # ${quoteData.id}`;
-  quoteAdviceEl.textContent = quoteData.advice;
-  quoteCardEl.dataset.id = quoteData.id;
+function updateAdviceCard(adviceData) {
+  adviceNumberEl.textContent = `Advice # ${adviceData.id}`;
+  adviceTextEl.textContent = adviceData.advice;
+  adviceCardEl.dataset.id = adviceData.id;
 }
 
-function quoteChangeInit() {
-  getNewQuoteBtnEl.addEventListener("click", async () => {
-    hideQuoteCard();
+function adviceChangeInit() {
+  getNewAdviceBtnEl.addEventListener("click", async () => {
+    hideAdviceCard();
     showLoadingIndicator();
-    const quoteData = await getQuote();
+    const adviceData = await getAdvice();
     hideLoadingIndicator();
-    showQuoteCard();
-    updateQuoteCard(quoteData);
+    showAdviceCard();
+    updateAdviceCard(adviceData);
   });
 }
 
-function hideQuoteCard() {
-  quoteCardEl.classList.add("d-none");
+function hideAdviceCard() {
+  adviceCardEl.classList.add("d-none");
 }
 
 function hideLoadingIndicator() {
   laodingIndicatorEl.classList.add("d-none");
 }
 
-function showQuoteCard() {
-  quoteCardEl.classList.remove("d-none");
+function showAdviceCard() {
+  adviceCardEl.classList.remove("d-none");
 }
 
 function showLoadingIndicator() {
   laodingIndicatorEl.classList.remove("d-none");
 }
 
-function favoriteQuoteInit() {
+function favoriteAdviceInit() {
   favoriteBtnEl.addEventListener("click", async () => {
-    const quoteId = quoteCardEl.dataset.id;
+    const adviceId = adviceCardEl.dataset.id;
 
-    const quoteData = await getQuote(quoteId);
-    addQuoteToFavorites(quoteData);
-    showNewFavoriteQuote();
+    const adviceData = await getAdvice(adviceId);
+    addAdviceToFavorites(adviceData);
+    showNewFavoriteAdvice();
   });
 }
 
-function addQuoteToFavorites(quoteData) {
-  if (!checkIfQuoteAlreadyExists(quoteData)) {
-    favoriteQuotesState.push(quoteData);
+function addAdviceToFavorites(adviceData) {
+  if (!checkIfAdviceAlreadyExists(adviceData)) {
+    favoriteAdviceState.push(adviceData);
   }
-  updateFavoriteListEl(favoriteQuotesState);
+  updateFavoriteListEl(favoriteAdviceState);
 }
 
-function createFavoriteQuote(quoteData) {
-  const favoriteQuoteEl = document.createElement("li");
-  favoriteQuoteEl.classList.add("list-group-item", "d-flex", "gap-2");
-  favoriteQuoteEl.dataset.id = quoteData.id;
+function createFavoriteAdvice(adviceData) {
+  const favoriteAdviceeEl = document.createElement("li");
+  favoriteAdviceeEl.classList.add("list-group-item", "d-flex", "gap-2");
+  favoriteAdviceeEl.dataset.id = adviceData.id;
 
-  const quoteNumberEl = document.createElement("span");
-  quoteNumberEl.textContent = quoteData.id;
-  favoriteQuoteEl.appendChild(quoteNumberEl);
+  const favoriteNumberEl = document.createElement("span");
+  favoriteNumberEl.textContent = adviceData.id;
+  favoriteAdviceeEl.appendChild(favoriteNumberEl);
 
-  const quoteAdviceEl = document.createElement("span");
-  quoteAdviceEl.textContent = quoteData.advice;
-  favoriteQuoteEl.appendChild(quoteAdviceEl);
+  const adviceTextEl = document.createElement("span");
+  adviceTextEl.textContent = adviceData.advice;
+  favoriteAdviceeEl.appendChild(adviceTextEl);
 
   const removeBtnEl = document.createElement("button");
   removeBtnEl.classList.add("btn", "btn-danger", "ms-auto", "align-self-start");
   removeBtnEl.textContent = "X";
-  favoriteQuoteEl.appendChild(removeBtnEl);
+  favoriteAdviceeEl.appendChild(removeBtnEl);
 
-  appendQuoteToFragment(favoriteQuoteEl);
+  appendAdviceToFragment(favoriteAdviceeEl);
 }
 
-function appendQuoteToFragment(quote) {
-  fragmentEl.append(quote);
+function appendAdviceToFragment(advice) {
+  fragmentEl.append(advice);
 }
 
-function removeFavoriteQuoteInit() {
+function removeFavoriteAdviceInit() {
   favoriteListEl.addEventListener("click", (event) => {
     if (event.target.matches("button")) {
       const parentEl = event.target.parentElement;
-      const quoteId = parentEl.dataset.id;
-      removeQuote(quoteId);
+      const adviceId = parentEl.dataset.id;
+      removeAdvice(adviceId);
     }
   });
 }
@@ -159,18 +159,18 @@ function removeEl(el) {
   el.remove();
 }
 
-function checkIfQuoteAlreadyExists(quote) {
-  if (favoriteQuotesState.find((q) => q.id === quote.id)) {
+function checkIfAdviceAlreadyExists(advice) {
+  if (favoriteAdviceState.find((q) => q.id === advice.id)) {
     showModal();
     return true;
   }
   return false;
 }
 
-function updateFavoriteListEl(newFavoriteQuoteState) {
+function updateFavoriteListEl(newFavoriteAdviceState) {
   clearFavoriteListEl();
-  for (const quote of newFavoriteQuoteState) {
-    createFavoriteQuote(quote);
+  for (const advice of newFavoriteAdviceState) {
+    createFavoriteAdvice(advice);
   }
   favoriteListEl.appendChild(fragmentEl);
 }
@@ -179,21 +179,34 @@ function clearFavoriteListEl() {
   favoriteListEl.innerHTML = null;
 }
 
-function removeQuote(id) {
+function removeAdvice(id) {
   const numberId = Number.parseInt(id, 10);
-  favoriteQuotesState = favoriteQuotesState.filter((q) => q.id !== numberId);
-  updateFavoriteListEl(favoriteQuotesState);
+  favoriteAdviceState = favoriteAdviceState.filter((q) => q.id !== numberId);
+  updateFavoriteListEl(favoriteAdviceState);
 }
 
-function showNewFavoriteQuote() {
-  const newFavoriteQuote = favoriteListEl.lastElementChild;
-  newFavoriteQuote.scrollIntoView({ behavior: "smooth", block: "center" });
+function showNewFavoriteAdvice() {
+  const newFavoriteAdviceEl = favoriteListEl.lastElementChild;
+  newFavoriteAdviceEl.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function scrollIntoViewGenerator() {
   showBtnEl.addEventListener("click", () => {
-    quoteCardEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    adviceCardEl.scrollIntoView({ behavior: "smooth", block: "center" });
   });
 }
 
-function showModal() {}
+function showModal() {
+  const duplicateModal = new bootstrap.Modal(
+    document.getElementById("duplicateModal", {
+      keyboard: false,
+    })
+  );
+  updateModalMessage();
+  duplicateModal.show();
+}
+
+function updateModalMessage(adviceId) {
+  const messageEl = document.querySelector(".modal-body");
+  messageEl.textContent = `Duplicate advice. Advice with number ${adviceId} already exists!`;
+}
